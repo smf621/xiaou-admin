@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/banner' }">轮播图列表</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/seckill' }">秒杀活动</el-breadcrumb-item></el-breadcrumb-item>
     </el-breadcrumb>
     <el-button type="primary" @click="add">添加</el-button>
 
@@ -49,14 +49,14 @@ export default {
     // },
     handleEdit(index, row) {
       console.log(index, row);
-      this.$router.push("/banner/" + row.id);
+      this.$router.push("/seckill/" + row.id);
     },
     add() {
-      this.$router.push("/banner/add");
+      this.$router.push("/seckill/add");
     },
     del(row) {
       console.log("确定删除");
-      this.$http.post("/menudelete", { id: row.id }).then((res) => {
+      this.$http.post("/seckdelete", { id: row.id }).then((res) => {
         if (res.data.code == 200) {
           this.getList();
         }

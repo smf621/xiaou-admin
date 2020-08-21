@@ -7,8 +7,8 @@
     </el-breadcrumb>
 
     <el-form
-      :model="dynamicValidateForm"
-      ref="dynamicValidateForm"
+      :model="ruleForm"
+      ref="ruleForm"
       label-width="100px"
       class="demo-dynamic"
     >
@@ -21,12 +21,12 @@
         label="规格属性"
         :rules="[{ required: true, message: '请输入属性', trigger: 'blur' },]"
       >
-        <el-input v-model="dynamicValidateForm.email"></el-input>
+        <el-input v-model="ruleForm.email"></el-input>
           <el-button @click="addDomain">新增属性</el-button>
       </el-form-item>
 
       <el-form-item
-        v-for="(domain, index) in dynamicValidateForm.domains"
+        v-for="(domain, index) in ruleForm.domains"
         :label="'规格属性'"
         :key="domain.key"
         :prop="'domains.' + index + '.value'"
@@ -41,7 +41,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
 
       </el-form-item>
     </el-form>
@@ -64,7 +64,7 @@ export default {
   data() {
     return {
 
-      dynamicValidateForm: {
+      ruleForm: {
         domains: [
           {
             value: "",
@@ -86,13 +86,13 @@ export default {
       });
     },
     removeDomain(item) {
-      var index = this.dynamicValidateForm.domains.indexOf(item);
+      var index = this.ruleForm.domains.indexOf(item);
       if (index !== -1) {
-        this.dynamicValidateForm.domains.splice(index, 1);
+        this.ruleForm.domains.splice(index, 1);
       }
     },
     addDomain() {
-      this.dynamicValidateForm.domains.push({
+      this.ruleForm.domains.push({
         value: "",
         key: Date.now(),
       });

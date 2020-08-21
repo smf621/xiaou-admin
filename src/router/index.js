@@ -103,6 +103,19 @@ export default new Router({
           path:"/banner/:id",
           component:()=>import('@/pages/Banner/Add')
         },
+        {
+          path:"seckill",
+          component:()=>import('@/pages/Seckill/Seckill')
+        },
+        {
+          path:"seckill/add",
+          component:()=>import('@/pages/Seckill/Add')
+        },
+        {
+          path:"/seckill/:id",
+          component:()=>import('@/pages/Seckill/Add')
+        },
+
 
       ]
     },
