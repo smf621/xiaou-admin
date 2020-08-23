@@ -10,7 +10,6 @@
 
       <el-table-column label="活动名称" width="200" prop="title"></el-table-column>
     
-    
       <el-table-column label="状态" width="200">
         <template slot-scope="scope">
           <el-button type="primary">{{scope.row.status | status}}</el-button>

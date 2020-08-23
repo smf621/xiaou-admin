@@ -3,7 +3,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/specs' }">商品规格</el-breadcrumb-item>
-      <el-breadcrumb-item>商品添加</el-breadcrumb-item>
+      <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-form
@@ -16,23 +16,24 @@
         <el-input v-model="ruleForm.specsname"></el-input>
       </el-form-item>
 
-      <el-form-item
+      <!-- <el-form-item
         prop="email"
         label="规格属性"
         :rules="[{ required: true, message: '请输入属性', trigger: 'blur' },]"
       >
         <el-input v-model="ruleForm.email"></el-input>
-          <el-button @click="addDomain">新增属性</el-button>
-      </el-form-item>
+         
+      </el-form-item> -->
 
       <el-form-item
-        v-for="(domain, index) in ruleForm.domains"
+        v-for="(domain, index) in ruleForm.attrs"
         :label="'规格属性'"
         :key="domain.key"
-        :prop="'domains.' + index + '.value'"
+        :prop="'attrs.' + index + '.value'"
         :rules="{required: true, message: '属性不能为空', trigger: 'blur'}"
       >
         <el-input v-model="domain.value"></el-input>
+         <el-button @click="addDomain">新增属性</el-button>
         <el-button @click.prevent="removeDomain(domain)">删除</el-button>
       </el-form-item>
 
@@ -53,24 +54,30 @@ export default {
   mounted() {
     this.id = this.$route.params.id;
     if (this.id) {
-      // this.$http.get("/specsinfo", { id: this.id }).then((res) => {
-      //   console.log(res);
-      //   // let {status,attrs} = res.data.list[0]
-      //   // attrs = attrs.join(',')
-      //   // this.ruleForm = {...res.data.list[0],status:status== 1?true:false }
-      // });
+      this.title = "规格编辑"
+      this.$http.get("/specsinfo", { id: this.id }).then((res) => {
+        console.log(res);
+        let {status,attrs} = res.data.list[0]
+        // attrs = attrs.join(',')
+        console.log(attrs);
+        this.ruleForm = {...res.data.list[0],status:status == 1 ? true:false }
+      });
+    }else{
+      this.title = "规格添加"
     }
   },
   data() {
     return {
-
+      title:"",
+      
       ruleForm: {
-        domains: [
+        attrs: [
           {
-            value: "",
+            value: '',
           },
         ],
-        email: "",
+        specsname: "",
+        status:false,
       },
     };
   },
@@ -78,7 +85,24 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+              this.ruleForm.status = this.ruleForm.status ? 1 :2
+              let arr = this.ruleForm.attrs.map(item=>{
+                // console.log(item.value);// 大 小
+                return item.value
+              })
+              let obj = JSON.parse(JSON.stringify(this.ruleForm))
+              // obj.attrs = JSON.stringify(arr)
+              obj.attrs = arr.join(',')
+
+          if(this.id){
+            //编辑
+          }else{
+            // 添加
+            this.$http.post('/specsadd',{...obj}).then(res=>{
+              console.log(res);
+              this.$router.push('/specs')
+            })
+          }
         } else {
           console.log("error submit!!");
           return false;
@@ -86,15 +110,15 @@ export default {
       });
     },
     removeDomain(item) {
-      var index = this.ruleForm.domains.indexOf(item);
+      var index = this.ruleForm.attrs.indexOf(item);
       if (index !== -1) {
-        this.ruleForm.domains.splice(index, 1);
+        this.ruleForm.attrs.splice(index, 1);
       }
     },
     addDomain() {
-      this.ruleForm.domains.push({
-        value: "",
-        key: Date.now(),
+      this.ruleForm.attrs.push({
+        value: '',
+        // key: Date.now(),
       });
     },
   },
