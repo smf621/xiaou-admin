@@ -86,8 +86,7 @@ export default {
         this.$http.get("/catelist", { pid: 0 }).then((res) => {
             // console.log(res);
             this.firstList = res.data.list;
-            this.firstChange(this.ruleForm.first_cateid);
-            this.secondChange(this.ruleForm.second_cateid);
+            
         });
         this.id = this.$route.params.id;
 
@@ -95,7 +94,7 @@ export default {
             this.title = "秒杀编辑";
             this.$http.get("/seckinfo", { id: this.id }).then((res) => {
                 console.log(res);
-                let { status, goodsid, begintime, endtime } = res.data.list;
+                let { status, begintime, endtime } = res.data.list;
                 begintime = this.formatTime(begintime)
                 endtime = this.formatTime(endtime)
                 this.ruleForm = {
@@ -105,6 +104,8 @@ export default {
                     endtime
                 };
                 console.log( this.ruleForm);
+                this.firstChange(this.ruleForm.first_cateid);
+                this.secondChange(this.ruleForm.second_cateid);
             });
         } else {
             this.title = "秒杀添加";
